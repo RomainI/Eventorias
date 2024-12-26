@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
@@ -107,12 +108,12 @@ fun CreateEventScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Title Input
-            Text(
-                text = "Title",
-                color = Color.Gray,
-                fontSize = 12.sp,
-                modifier = Modifier.fillMaxWidth()
-            )
+//            Text(
+//                text = "Title",
+//                color = Color.Gray,
+//                fontSize = 12.sp,
+//                modifier = Modifier.fillMaxWidth()
+//            )
             Surface(
                 shape = MaterialTheme.shapes.small,
                 color = Color.DarkGray,
@@ -124,24 +125,26 @@ fun CreateEventScreen(
                     value = title,
                     onValueChange = { title = it },
                     textStyle = LocalTextStyle.current.copy(color = Color.White),
-                    label = { Text(text = "Enter title", color = Color.Gray) },
+                    placeholder = { Text(text = "Enter title", color = Color.Gray) },
+                    label = { Text(text = "Title", color = Color.Gray) },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent
-                    )
+                    ),
+                    shape = RoundedCornerShape(4.dp)
                 )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             // Description Input
-            Text(
-                text = "Description",
-                color = Color.Gray,
-                fontSize = 12.sp,
-                modifier = Modifier.fillMaxWidth()
-            )
+//            Text(
+//                text = "Description",
+//                color = Color.Gray,
+//                fontSize = 12.sp,
+//                modifier = Modifier.fillMaxWidth()
+//            )
             Surface(
                 shape = MaterialTheme.shapes.small,
                 color = Color.DarkGray,
@@ -153,12 +156,14 @@ fun CreateEventScreen(
                     value = description,
                     onValueChange = { description = it },
                     textStyle = LocalTextStyle.current.copy(color = Color.White),
-                    label = { Text(text = "Enter description", color = Color.Gray) },
+                    label = { Text(text = "Description", color = Color.Gray) },
+                    placeholder = { Text(text = "Enter description", color = Color.Gray) },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent
-                    )
+                    ),
+                    shape = RoundedCornerShape(4.dp)
                 )
             }
 
@@ -170,11 +175,11 @@ fun CreateEventScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
-                    Text(
-                        text = "Date",
-                        color = Color.Gray,
-                        fontSize = 12.sp
-                    )
+//                    Text(
+//                        text = "Date",
+//                        color = Color.Gray,
+//                        fontSize = 12.sp
+//                    )
                     Surface(
                         shape = MaterialTheme.shapes.small,
                         color = Color.DarkGray,
@@ -186,21 +191,23 @@ fun CreateEventScreen(
                             value = date,
                             onValueChange = { date = it },
                             textStyle = LocalTextStyle.current.copy(color = Color.White),
-                            label = { Text(text = "MM/DD/YYYY", color = Color.Gray) },
+                            label = { Text(text = "Date", color = Color.Gray) },
+                            placeholder = { Text(text = "MM/DD/YYYY", color = Color.Gray) },
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent
-                            )
+                            ),
+                            shape = RoundedCornerShape(4.dp)
                         )
                     }
                 }
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Time",
-                        color = Color.Gray,
-                        fontSize = 12.sp
-                    )
+//                    Text(
+//                        text = "Time",
+//                        color = Color.Gray,
+//                        fontSize = 12.sp
+//                    )
                     Surface(
                         shape = MaterialTheme.shapes.small,
                         color = Color.DarkGray,
@@ -212,12 +219,14 @@ fun CreateEventScreen(
                             value = time,
                             onValueChange = { time = it },
                             textStyle = LocalTextStyle.current.copy(color = Color.White),
-                            label = { Text(text = "HH:MM", color = Color.Gray) },
+                            label = { Text(text = "Time", color = Color.Gray) },
+                            placeholder = { Text(text = "HH:MM", color = Color.Gray) },
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent
-                            )
+                            ),
+                            shape = RoundedCornerShape(4.dp)
                         )
                     }
                 }
@@ -226,12 +235,12 @@ fun CreateEventScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             // Address Input
-            Text(
-                text = "Address",
-                color = Color.Gray,
-                fontSize = 12.sp,
-                modifier = Modifier.fillMaxWidth()
-            )
+//            Text(
+//                text = "Address",
+//                color = Color.Gray,
+//                fontSize = 12.sp,
+//                modifier = Modifier.fillMaxWidth()
+//            )
             Surface(
                 shape = MaterialTheme.shapes.small,
                 color = Color.DarkGray,
@@ -243,12 +252,14 @@ fun CreateEventScreen(
                     value = address,
                     onValueChange = { address = it },
                     textStyle = LocalTextStyle.current.copy(color = Color.White),
-                    label = { Text(text = "Enter address", color = Color.Gray) },
+                    label = { Text(text = "Address", color = Color.Gray) },
+                    placeholder = { Text(text = "Enter address", color = Color.Gray) },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent
-                    )
+                    ),
+                    shape = RoundedCornerShape(4.dp)
                 )
             }
 
