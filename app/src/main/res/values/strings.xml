@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Eventorias</string>
+    <string name="contentDescription_go_back">Return button</string>
+
+    <string name="add_fragment_label">Add an event</string>
+
+</resources>
