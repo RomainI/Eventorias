@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -48,11 +49,12 @@ import coil.compose.rememberImagePainter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManagementScreen(
-    viewModel: ManagementViewModel = hiltViewModel()){
+    viewModel: ManagementViewModel = hiltViewModel()
+) {
     val user by viewModel.user.collectAsState()
     var notificationsEnabled by remember { mutableStateOf(true) }
-
     var selectedImageUri by remember { mutableStateOf<String?>(null) }
+    var address by remember { mutableStateOf("") } // État pour l'adresse
 
     val context = LocalContext.current
 
@@ -79,93 +81,106 @@ fun ManagementScreen(
         }
     }
 
+    if (user != null) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("User profile") },
-            )
-        }
-    ) { paddingValues ->
-        if (user != null) {
-            Column(
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.Start
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    val imagePainter = rememberAsyncImagePainter(
-                        model = selectedImageUri ?: user?.photoUrl?.toString()
-                        ?: "https://icons.veryicon.com/png/o/miscellaneous/rookie-official-icon-gallery/225-default-avatar.png"
-                    )
+                Text(
+                    text = "User profile",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+                val imagePainter = rememberAsyncImagePainter(
+                    model = selectedImageUri ?: user?.photoUrl?.toString()
+                    ?: "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
+                )
 
-                    Image(
-                        painter = imagePainter,
-                        contentDescription = "User Avatar",
-                        modifier = Modifier
-                            .size(100.dp)
-                            .clip(CircleShape)
-                            .clickable { imagePickerLauncher.launch("image/*") },
-                        contentScale = ContentScale.Crop
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                ProfileField(label = "Name", value = user?.displayName ?: "Unknown")
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                ProfileField(label = "E-mail", value = user?.email ?: "No email available")
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Switch(
-                        checked = notificationsEnabled,
-                        onCheckedChange = { isChecked ->
-                            notificationsEnabled = isChecked
-                            if (isChecked) {
-                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                                    notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-                                } else {
-                                    viewModel.switchNotification(true)
-                                    Toast.makeText(context, "Notifications activées", Toast.LENGTH_SHORT).show()
-                                }
-                            } else {
-                                viewModel.switchNotification(false)
-                                Toast.makeText(context, "Notifications désactivées", Toast.LENGTH_SHORT).show()
-                            }
-                        },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = Color.Red
-                        )
-                    )
-                    Text(
-                        text = "Notifications",
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
+                Image(
+                    painter = imagePainter,
+                    contentDescription = "User Avatar",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .clickable { imagePickerLauncher.launch("image/*") },
+                    contentScale = ContentScale.Crop,
+                )
             }
-        } else {
-            Text(
-                text = "Error loading user data",
-                color = Color.Red,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.Center)
-            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ProfileField(label = "Name", value = user?.displayName ?: "Unknown")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ProfileField(label = "E-mail", value = user?.email ?: "No email available")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Champ d'autocomplétion d'adresse
+//TODO//
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Switch(
+                    checked = notificationsEnabled,
+                    onCheckedChange = { isChecked ->
+                        notificationsEnabled = isChecked
+                        if (isChecked) {
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                                notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                            } else {
+                                viewModel.switchNotification(true)
+                                Toast.makeText(
+                                    context,
+                                    "Notifications activées",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
+                            viewModel.switchNotification(false)
+                            Toast.makeText(
+                                context,
+                                "Notifications désactivées",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = Color.Red
+                    )
+                )
+                Text(
+                    text = "Notifications",
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
         }
+    } else {
+        Text(
+            text = "Error loading user data",
+            color = Color.Red,
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
+        )
     }
 }
 
@@ -196,4 +211,10 @@ fun ProfileField(label: String, value: String) {
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ManagementScreenPreview() {
+    ManagementScreen()
 }

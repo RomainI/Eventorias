@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,13 +10,16 @@ plugins {
 
 }
 
+
+
 android {
+
     namespace = "fr.ilardi.eventorias"
     compileSdk = 35
 
     defaultConfig {
         applicationId = "fr.ilardi.eventorias"
-        minSdk = 26
+        minSdk = 27
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -22,10 +28,24 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        val mapsApiKey: String = project.findProperty("MAPS_API_KEY") as String? ?: ""
-        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
-        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
 
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        val MAPS_API_KEY : String
+        if (localPropertiesFile.exists()) {
+            FileInputStream(localPropertiesFile).use { stream ->
+                localProperties.load(stream)
+            }
+            MAPS_API_KEY = localProperties["MAPS_API_KEY"]?.toString().toString()
+            println("MAPS_API_KEY from local.properties: $MAPS_API_KEY")
+        } else {
+            println("local.properties file not found!")
+            MAPS_API_KEY=""
+        }
+
+        buildConfigField("String", "MAPS_API_KEY", "\"$MAPS_API_KEY\"")
+        manifestPlaceholders["MAPS_API_KEY"] = MAPS_API_KEY
+        println("MAPS_API_KEY from local.properties: $MAPS_API_KEY")
     }
 
     buildTypes {
@@ -47,6 +67,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -57,6 +78,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
@@ -108,7 +130,9 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:4.4.2")
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation("com.google.maps.android:maps-compose-widgets:4.4.2")
-
+    implementation ("com.google.android.libraries.places:places:4.1.0")
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 }
 
 kapt {
