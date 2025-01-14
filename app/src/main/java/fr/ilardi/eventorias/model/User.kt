@@ -1,4 +1,7 @@
 package fr.ilardi.eventorias.model
 
-class User {
-}
+data class User(
+    val name: String = "",
+    val email: String = "",
+    val profileImage: String = ""
+)

@@ -6,11 +6,13 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.type.Date
 
 import fr.ilardi.eventorias.R
+import fr.ilardi.eventorias.model.User
 import kotlinx.coroutines.tasks.await
 import java.util.Calendar
 import java.util.UUID
@@ -42,9 +44,24 @@ class AuthenticationRepository @Inject constructor(
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .setIsSmartLockEnabled(false, true)
-            .setTheme(R.style.LoginTheme)
+            .setTheme(R.style.FirebaseLoginTheme)
             .setLogo(R.drawable.logo)
             .build()
+    }
+
+    suspend fun getUserByUid(uid: String): User? {
+        return try {
+            val documentSnapshot = FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(uid)
+                .get()
+                .await()
+
+            documentSnapshot.toObject(User::class.java)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     suspend fun uploadImageToStorage(imageUri: Uri): String {
