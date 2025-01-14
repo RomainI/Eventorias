@@ -40,6 +40,7 @@ object AppModule {
 
     @Provides
     @Singleton
+//    @PlacesRetrofit
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(GooglePlacesApi.BASE_URL)
@@ -50,13 +51,24 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGooglePlacesApi(retrofit: Retrofit): GooglePlacesApi {
+    fun provideGooglePlacesApi( retrofit: Retrofit): GooglePlacesApi {
         return retrofit.create(GooglePlacesApi::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideGoogleStaticMapsApi(retrofit: Retrofit): GoogleStaticMapsApi {
-        return retrofit.create(GoogleStaticMapsApi::class.java)
-    }
+
+//    @Provides
+//    @Singleton
+//    fun provideRetrofitForStaticMaps(): Retrofit {
+//        return Retrofit.Builder()
+//            .baseUrl(GoogleStaticMapsApi.BASE_URL)
+//            .client(OkHttpClient.Builder().build())
+//            .build()
+//    }
+//
+//    @Provides
+//    @Singleton
+//    fun provideGoogleStaticMapsApi(@StaticMapsRetrofit retrofitForStaticMaps: Retrofit): GoogleStaticMapsApi {
+//        return retrofitForStaticMaps.create(GoogleStaticMapsApi::class.java)
+//    }
 }
+

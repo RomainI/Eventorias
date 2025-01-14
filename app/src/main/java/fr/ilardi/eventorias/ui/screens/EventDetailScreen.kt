@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -54,7 +55,6 @@ fun EventDetailScreen(
         Text(text = "Error")
         return
     }
-    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
 
 
     val event =
@@ -86,34 +86,42 @@ fun EventDetailScreen(
             Column(
                 modifier = Modifier
                     .padding(8.dp)
-                    .padding(contentPadding),
+                    .padding(contentPadding)
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(event.image),
                     contentDescription = "Event Image",
                     modifier = Modifier
-                        .size(width = 364.dp, height = 364.dp)
-                        .clip(RoundedCornerShape(8.dp)),
+                        .size(364.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .align(Alignment.CenterHorizontally),
                     contentScale = ContentScale.Crop
                 )
                 Text(text = event.description)
                 Spacer(modifier = Modifier.height(8.dp))
-                Row {
-                    Text(text = event.address)
-                    LaunchedEffect(event.address) {
-                        bitmap = viewModel.getMapWithAddress(event.address)
-                    }
-
-                    bitmap?.let {
-                        Image(
-                            bitmap = it.asImageBitmap(),
-                            contentDescription = "Map Image",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            contentScale = ContentScale.Crop
-                        )
-                    } ?: Text(text = "Loading map...")
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = event.address,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 8.dp),
+                        color = Color.White
+                    )
+                    val mapUrl = viewModel.loadMap(event.address)
+                    Image(
+                        painter = rememberAsyncImagePainter(mapUrl),
+                        contentDescription = "Map Image",
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(8.dp))
+                            .fillMaxWidth(),
+                        contentScale = ContentScale.Crop
+                    )
                 }
             }
 

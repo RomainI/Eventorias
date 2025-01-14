@@ -5,10 +5,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import fr.ilardi.eventorias.model.Event
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FirestoreEventRepository @Inject constructor(
@@ -64,7 +66,9 @@ class FirestoreEventRepository @Inject constructor(
             address = event.address,
             id=event.id,
             description = event.description,
-            authorUid = event.authorUid
+            authorUid = event.authorUid,
+            date = event.date,
+            time = event.time
             )
 
         eventsCollection.add(newEvent)
@@ -74,13 +78,15 @@ class FirestoreEventRepository @Inject constructor(
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.reference.child("images/${System.currentTimeMillis()}.jpg")
 
-        return try {
-            storageRef.putFile(imageUri).await()
-            val downloadUrl = storageRef.downloadUrl.await()
-            downloadUrl.toString()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw Exception("Échec de l'upload de l'image : ${e.message}")
+        return withContext(NonCancellable) {
+            try {
+                storageRef.putFile(imageUri).await()
+                val downloadUrl = storageRef.downloadUrl.await()
+                downloadUrl.toString()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                throw Exception("Échec de l'upload de l'image : ${e.message}")
+            }
         }
     }
 }
