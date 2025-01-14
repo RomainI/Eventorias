@@ -120,16 +120,65 @@ fun ManagementScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            ProfileField(label = "Name", value = user?.displayName ?: "Unknown")
+
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            ) {
+                Text(
+                    text = "Name",
+                    color = Color.Gray,
+                    fontSize = 12.sp
+                )
+                Surface(
+                    shape = MaterialTheme.shapes.medium,
+                    color = Color.DarkGray,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                ) {
+                    Text(
+                        text = user!!.displayName?:"",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+            }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            ProfileField(label = "E-mail", value = user?.email ?: "No email available")
 
-            Spacer(modifier = Modifier.height(16.dp))
 
-            // Champ d'autocomplétion d'adresse
-//TODO//
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            ) {
+                Text(
+                    text = "E-mail",
+                    color = Color.Gray,
+                    fontSize = 12.sp
+                )
+                Surface(
+                    shape = MaterialTheme.shapes.medium,
+                    color = Color.DarkGray,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                ) {
+                    Text(
+                        text = user!!.email?:"",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+            }
+
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -184,34 +233,6 @@ fun ManagementScreen(
     }
 }
 
-@Composable
-fun ProfileField(label: String, value: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 8.dp)
-    ) {
-        Text(
-            text = label,
-            color = Color.Gray,
-            fontSize = 12.sp
-        )
-        Surface(
-            shape = MaterialTheme.shapes.medium,
-            color = Color.DarkGray,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-        ) {
-            Text(
-                text = value,
-                color = Color.White,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable

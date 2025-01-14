@@ -7,7 +7,7 @@ import fr.ilardi.eventorias.utils.Resource
 import javax.inject.Inject
 
 class GooglePlacesRepository @Inject constructor(
-    private val api: GooglePlacesApi,
+     private val api: GooglePlacesApi,
 ){
     suspend fun getPredictions(input: String): Resource<GooglePredictionsResponse> {
 

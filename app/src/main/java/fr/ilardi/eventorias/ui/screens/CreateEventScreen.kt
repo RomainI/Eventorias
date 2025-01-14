@@ -227,7 +227,7 @@ fun CreateEventScreen(
                     ) {
                         TextField(
                             value = date,
-                            onValueChange = {},
+                            onValueChange = {date = it},
                             textStyle = LocalTextStyle.current.copy(color = Color.White),
                             label = { Text(text = "Date", color = Color.Gray) },
                             placeholder = { Text(text = "Select Date", color = Color.Gray) },
@@ -254,7 +254,7 @@ fun CreateEventScreen(
                     ) {
                         TextField(
                             value = time,
-                            onValueChange = {},
+                            onValueChange = {time = it},
                             textStyle = LocalTextStyle.current.copy(color = Color.White),
                             label = { Text(text = "Time", color = Color.Gray) },
                             placeholder = { Text(text = "Select Time", color = Color.Gray) },

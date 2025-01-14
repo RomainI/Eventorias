@@ -24,6 +24,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -133,6 +134,9 @@ dependencies {
     implementation ("com.google.android.libraries.places:places:4.1.0")
     implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation ("io.coil-kt:coil-compose:2.7.0")
+
 }
 
 kapt {
