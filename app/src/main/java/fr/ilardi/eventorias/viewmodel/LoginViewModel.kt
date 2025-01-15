@@ -10,11 +10,6 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val authenticationRepository: AuthenticationRepository): ViewModel() {
 
-
-    fun isUserConnected() : Boolean {
-        return authenticationRepository.isUserAuthenticated()
-    }
-
     fun getLoginIntent() : Intent {
         return authenticationRepository.getSignInIntent()
     }

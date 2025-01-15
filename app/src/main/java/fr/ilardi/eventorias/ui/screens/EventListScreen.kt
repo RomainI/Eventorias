@@ -243,7 +243,7 @@ fun EventItem(event: Event, onEventClick: (Event) -> Unit, viewModel: EventViewM
 
     LaunchedEffect(event.authorUid) {
         event.authorUid?.let {
-            viewModel.getUserByUid(it)
+            viewModel.updateUserByUid(it)
             val fetchedUser = viewModel.userState.value
             user = fetchedUser
         }

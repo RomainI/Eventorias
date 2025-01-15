@@ -69,7 +69,7 @@ fun EventDetailScreen(
     val userState by viewModel.userState.collectAsStateWithLifecycle()
 
     LaunchedEffect(event?.authorUid) {
-        event?.authorUid?.let { viewModel.getUserByUid(it) }
+        event?.authorUid?.let { viewModel.updateUserByUid(it) }
     }
     val imageUrl = userState?.profileImage
         ?: "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"

@@ -23,7 +23,7 @@ class PredictionViewModel @Inject constructor(private val googleRepository: Goog
 //        }
 //    }
 
-    fun getPredictions(address: String) {
+    fun updatePredictions(address: String) {
         viewModelScope.launch {
             isLoading.value = true
             val response = googleRepository.getPredictions(input = address)
@@ -41,6 +41,6 @@ class PredictionViewModel @Inject constructor(private val googleRepository: Goog
     }
 
     fun onSearchAddressChange(address: String){
-        getPredictions(address)
+        updatePredictions(address)
     }
 }
