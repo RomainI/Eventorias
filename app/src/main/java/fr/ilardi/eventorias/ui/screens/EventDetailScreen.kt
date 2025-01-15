@@ -30,16 +30,23 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import fr.ilardi.eventorias.R
 import fr.ilardi.eventorias.viewmodel.EventViewModel
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
 import coil.compose.rememberAsyncImagePainter
 
 
@@ -59,7 +66,13 @@ fun EventDetailScreen(
 
     val event =
         viewModel.getEventById(eventId).collectAsStateWithLifecycle(initialValue = null).value
+    val userState by viewModel.userState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(event?.authorUid) {
+        event?.authorUid?.let { viewModel.getUserByUid(it) }
+    }
+    val imageUrl = userState?.profileImage
+        ?: "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
 
     if (event != null) {
         Scaffold(
@@ -98,7 +111,61 @@ fun EventDetailScreen(
                         .align(Alignment.CenterHorizontally),
                     contentScale = ContentScale.Crop
                 )
-                Text(text = event.description)
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 0.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.calendar),
+                                contentDescription = "Calendar icon",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(event.date)
+                        }
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.clock),
+                                contentDescription = "Calendar icon",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(event.time)
+
+                        }
+                    }
+//                    val imageUrl = event.authorUid?.let {
+//                        val user = viewModel.getUserByUid(it)
+//                        ("UserProfile", "User: $user")
+//                        user?.profileImage
+//                    }
+//                        ?: "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
+//
+//                    ("UserProfile", "Image URL: $imageUrl")
+
+//                    val imagePainter = rememberAsyncImagePainter(
+//                        model = imageUrl
+//                    )
+
+
+                    Image(
+                        painter = rememberAsyncImagePainter(imageUrl),
+                        contentDescription = "User Avatar",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop,
+                    )
+                }
+
+
+                Text(text = event.description, modifier = Modifier.padding(8.dp))
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier

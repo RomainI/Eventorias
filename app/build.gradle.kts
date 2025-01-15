@@ -38,15 +38,12 @@ android {
                 localProperties.load(stream)
             }
             MAPS_API_KEY = localProperties["MAPS_API_KEY"]?.toString().toString()
-            println("MAPS_API_KEY from local.properties: $MAPS_API_KEY")
         } else {
-            println("local.properties file not found!")
             MAPS_API_KEY=""
         }
 
         buildConfigField("String", "MAPS_API_KEY", "\"$MAPS_API_KEY\"")
         manifestPlaceholders["MAPS_API_KEY"] = MAPS_API_KEY
-        println("MAPS_API_KEY from local.properties: $MAPS_API_KEY")
     }
 
     buildTypes {

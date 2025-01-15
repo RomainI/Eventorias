@@ -53,11 +53,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.ilardi.eventorias.model.Event
 import fr.ilardi.eventorias.viewmodel.EventViewModel
 import fr.ilardi.eventorias.R
 import coil.compose.rememberAsyncImagePainter
+import fr.ilardi.eventorias.model.User
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -90,52 +92,52 @@ fun EventListScreen(
 
             if (selectedTabIndex == 0)
 
-            TopAppBar(
-                title = {
-                    if (isSearching) {
-                        TextField(
-                            value = searchQuery,
-                            onValueChange = { searchQuery = it },
-                            placeholder = { Text("Search events...") }
-                        )
-                    } else {
-                        Text(text = "Event list", color = Color.White)
-                    }
-                },
-                actions = {
-                    if (isSearching) {
-                        IconButton(onClick = {
-                            isSearching = false
-                            searchQuery = ""
-                        }) {
+                TopAppBar(
+                    title = {
+                        if (isSearching) {
+                            TextField(
+                                value = searchQuery,
+                                onValueChange = { searchQuery = it },
+                                placeholder = { Text("Search events...") }
+                            )
+                        } else {
+                            Text(text = "Event list", color = Color.White)
+                        }
+                    },
+                    actions = {
+                        if (isSearching) {
+                            IconButton(onClick = {
+                                isSearching = false
+                                searchQuery = ""
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "Close Search",
+                                    tint = Color.White
+                                )
+                            }
+                        } else {
+                            IconButton(onClick = { isSearching = true }) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.search),
+                                    contentDescription = "Search",
+                                    tint = Color.White
+                                )
+                            }
+                        }
+                        IconButton(onClick = { isSortedByNewestFirst = !isSortedByNewestFirst }) {
                             Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = "Close Search",
+                                imageVector = ImageVector.vectorResource(R.drawable.sort),
+                                contentDescription = "Sort",
                                 tint = Color.White
                             )
                         }
-                    } else {
-                        IconButton(onClick = { isSearching = true }) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.search),
-                                contentDescription = "Search",
-                                tint = Color.White
-                            )
-                        }
-                    }
-                    IconButton(onClick = { isSortedByNewestFirst = !isSortedByNewestFirst }) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.sort),
-                            contentDescription = "Sort",
-                            tint = Color.White
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.background
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        titleContentColor = MaterialTheme.colorScheme.background
+                    )
                 )
-            )
         },
         bottomBar = {
             BottomAppBar(
@@ -237,11 +239,18 @@ fun EventColumn(
 @Composable
 fun EventItem(event: Event, onEventClick: (Event) -> Unit, viewModel: EventViewModel) {
 
-    val user by viewModel.userFlow.collectAsState()
+    var user by remember { mutableStateOf<User?>(null) }
 
     LaunchedEffect(event.authorUid) {
-        event.authorUid?.let { viewModel.getEventById(it) }
+        event.authorUid?.let {
+            viewModel.getUserByUid(it)
+            val fetchedUser = viewModel.userState.value
+            user = fetchedUser
+        }
     }
+    val imageUrl = user?.profileImage
+        ?: "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
+
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -255,17 +264,17 @@ fun EventItem(event: Event, onEventClick: (Event) -> Unit, viewModel: EventViewM
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (user != null && user!!.profileImage != "") {
 
-                Image(
-                    painter = rememberAsyncImagePainter(user!!.profileImage),
-                    contentDescription = "Author Avatar",
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clip(RoundedCornerShape(25.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            }
+
+            Image(
+                painter = rememberAsyncImagePainter(imageUrl),
+                contentDescription = "Author Avatar",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(25.dp)),
+                contentScale = ContentScale.Crop
+            )
+
 
             Column(
                 modifier = Modifier
@@ -286,13 +295,14 @@ fun EventItem(event: Event, onEventClick: (Event) -> Unit, viewModel: EventViewM
                 painter = rememberAsyncImagePainter(event.image),
                 contentDescription = "Event Image",
                 modifier = Modifier
-                    .size(width = 100.dp, height = 60.dp)
+                    .size(width = 136.dp, height = 80.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
         }
     }
 }
+
 fun convertDateToFullText(dateString: String): String {
     val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
     val outputFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale.getDefault())
