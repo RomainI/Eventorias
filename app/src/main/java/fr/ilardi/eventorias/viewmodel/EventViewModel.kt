@@ -90,7 +90,7 @@ class EventViewModel @Inject constructor(
         return authenticationRepository.getCurrentUser()?.photoUrl
     }
 
-    fun getUserByUid(uid: String) {
+    fun updateUserByUid(uid: String) {
         viewModelScope.launch {
             val user = authenticationRepository.getUserByUid(uid)
             _userState.value = user
