@@ -54,7 +54,6 @@ fun ManagementScreen(
     val user by viewModel.user.collectAsState()
     var notificationsEnabled by remember { mutableStateOf(true) }
     var selectedImageUri by remember { mutableStateOf<String?>(null) }
-    var address by remember { mutableStateOf("") } // État pour l'adresse
 
     val context = LocalContext.current
 

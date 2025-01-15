@@ -19,7 +19,7 @@ class PredictionViewModel @Inject constructor(private val googleRepository: Goog
 //    init{
 //        getPredictions("7 rue de la chapelle")
 //        for(address in predictions.value){
-//            Log.d("TEST ADDRESS", address.description)
+//            ("TEST ADDRESS", address.description)
 //        }
 //    }
 

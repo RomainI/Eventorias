@@ -19,6 +19,11 @@ class ManagementViewModel @Inject constructor(private val authenticationReposito
     private val _user = MutableStateFlow<FirebaseUser?>(authenticationRepository.getCurrentUser())
     val user: StateFlow<FirebaseUser?> = _user
 
+//    private val _user = MutableStateFlow<User?>(authenticationRepository.getUserByUid(
+//        authenticationRepository.getCurrentUser()!!.uid))
+//    val user: StateFlow<User?> = _user
+
+
     fun getUserName() : String?  {
         return authenticationRepository.getCurrentUser()?.displayName
     }

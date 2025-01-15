@@ -33,11 +33,15 @@ class EventViewModel @Inject constructor(
 
     private val _events = MutableStateFlow<List<Event>>(emptyList())
     val events: StateFlow<List<Event>> = _events
-    private val _userFlow = MutableStateFlow<User?>(null)
-    val userFlow: StateFlow<User?> = _userFlow
+//    private val _userFlow = MutableStateFlow<User?>(null)
+//    val userFlow: StateFlow<User?> = _userFlow
+
+    private val _userState = MutableStateFlow<User?>(null)
+    val userState: StateFlow<User?> = _userState
 
 
     init {
+        authenticationRepository.saveNewUserInFirebase()
         observeEvents()
     }
 
@@ -74,7 +78,6 @@ class EventViewModel @Inject constructor(
     fun addEvent(event: Event) {
         viewModelScope.launch {
             repository.addEvent(event)
-            Log.d("ADD EVENT ViewModel", event.title)
             _events.value = repository.getEvents()
         }
     }
@@ -89,7 +92,8 @@ class EventViewModel @Inject constructor(
 
     fun getUserByUid(uid: String) {
         viewModelScope.launch {
-            _userFlow.value = authenticationRepository.getUserByUid(uid)
+            val user = authenticationRepository.getUserByUid(uid)
+            _userState.value = user
         }
     }
 

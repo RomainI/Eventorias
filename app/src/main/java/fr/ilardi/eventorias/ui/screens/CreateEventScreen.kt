@@ -352,7 +352,6 @@ fun CreateEventScreen(
             // Validate Button
             Button(
                 onClick = {
-                    Log.d("Event", title+" "+date+" "+description+" "+address)
                     if (title.isNotEmpty() && date.isNotEmpty() && description.isNotEmpty() && address.isNotEmpty()) {
                         val event = Event(
                             title = title,
