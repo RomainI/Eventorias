@@ -1,5 +1,6 @@
 package fr.ilardi.eventorias.di
 
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -56,19 +57,11 @@ object AppModule {
     }
 
 
-//    @Provides
-//    @Singleton
-//    fun provideRetrofitForStaticMaps(): Retrofit {
-//        return Retrofit.Builder()
-//            .baseUrl(GoogleStaticMapsApi.BASE_URL)
-//            .client(OkHttpClient.Builder().build())
-//            .build()
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideGoogleStaticMapsApi(@StaticMapsRetrofit retrofitForStaticMaps: Retrofit): GoogleStaticMapsApi {
-//        return retrofitForStaticMaps.create(GoogleStaticMapsApi::class.java)
-//    }
+    @Provides
+    @Singleton
+    fun provideAuthUI(): AuthUI {
+        return AuthUI.getInstance()
+    }
+
 }
 

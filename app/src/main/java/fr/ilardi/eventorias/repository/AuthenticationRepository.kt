@@ -20,20 +20,21 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Singleton
 class AuthenticationRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val storage: FirebaseStorage
+    private val storage: FirebaseStorage,
+    private val firestore: FirebaseFirestore,
+    private val authUI: AuthUI
 ) {
 
     fun isUserAuthenticated(): Boolean {
         return firebaseAuth.currentUser != null
     }
 
-
     fun getCurrentUser(): FirebaseUser? {
         return firebaseAuth.currentUser
     }
-
 
     fun getSignInIntent(): Intent {
         val providers = arrayListOf(
@@ -41,8 +42,7 @@ class AuthenticationRepository @Inject constructor(
             AuthUI.IdpConfig.EmailBuilder().build()
         )
 
-        return AuthUI.getInstance()
-            .createSignInIntentBuilder()
+        return authUI.createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .setIsSmartLockEnabled(false, true)
             .setTheme(R.style.FirebaseLoginTheme)
@@ -52,7 +52,7 @@ class AuthenticationRepository @Inject constructor(
 
     suspend fun getUserByUid(uid: String): User? {
         return try {
-            val document = FirebaseFirestore.getInstance().collection("users").document(uid).get().await()
+            val document = firestore.collection("users").document(uid).get().await()
             if (document.exists()) {
                 val name = document.getString("name") ?: ""
                 val email = document.getString("email") ?: ""
@@ -68,11 +68,9 @@ class AuthenticationRepository @Inject constructor(
     }
 
     fun saveNewUserInFirebase() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
-            val firestore = FirebaseFirestore.getInstance()
             val userDocRef = firestore.collection("users").document(currentUser.uid)
-
             userDocRef.get()
                 .addOnSuccessListener { document ->
                     val firestorePhotoUrl = document.getString("photoUrl")
@@ -86,17 +84,13 @@ class AuthenticationRepository @Inject constructor(
 
                         userDocRef.set(userMap)
                             .addOnSuccessListener {
+                                Log.d("Firestore", "User successfully saved")
                             }
                             .addOnFailureListener { e ->
-                                Log.e(
-                                    "Firestore",
-                                    "Erreur lors de l'ajout de l'utilisateur : ${e.message}"
-                                )
+                                Log.e("Firestore", "Failed to save user: ${e.message}")
                             }
-                    } else {
                     }
                 }
-
         }
     }
 
@@ -106,15 +100,6 @@ class AuthenticationRepository @Inject constructor(
         storageRef.putFile(imageUri).await()
         return storageRef.downloadUrl.await().toString()
     }
-
-//    suspend fun updateUserProfilePhoto(photoUrl: String) {
-//        val user = firebaseAuth.currentUser ?: return
-//        val profileUpdates = UserProfileChangeRequest.Builder()
-//            .setPhotoUri(Uri.parse(photoUrl))
-//            .build()
-//
-//        user.updateProfile(profileUpdates).await()
-//    }
 
     suspend fun updateUserProfilePhoto(photoUrl: String) {
         val user = firebaseAuth.currentUser ?: return
@@ -143,7 +128,4 @@ class AuthenticationRepository @Inject constructor(
                 }
         }
     }
-
-
 }
-

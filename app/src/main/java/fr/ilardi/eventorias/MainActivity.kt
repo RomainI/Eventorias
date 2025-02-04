@@ -31,7 +31,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        println("MAPS_API_KEY: ${BuildConfig.MAPS_API_KEY}")
 
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, BuildConfig.MAPS_API_KEY)

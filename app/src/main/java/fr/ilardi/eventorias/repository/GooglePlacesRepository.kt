@@ -11,8 +11,6 @@ class GooglePlacesRepository @Inject constructor(
 ){
     suspend fun getPredictions(input: String): Resource<GooglePredictionsResponse> {
 
-//        ("GooglePlacesRepository", "input "+input)
-//        ("GooglePlacesRepository","try "+api.getPredictions(input = input).predictions.get(0).description)
         val response = try {
             api.getPredictions(input = input)
         } catch (e: Exception) {

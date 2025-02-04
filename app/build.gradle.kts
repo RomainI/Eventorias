@@ -25,7 +25,7 @@ android {
         versionName = "1.0"
 
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "fr.ilardi.eventorias.CustomHiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -74,6 +74,9 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+            excludes += "META-INF/DEPENDENCIES"
         }
     }
 
@@ -94,10 +97,13 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.7.7")
     debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation ("androidx.compose.ui:ui-test-manifest:1.7.7")
     implementation ("androidx.appcompat:appcompat:1.7.0")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-intents:3.5.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.5.0")
 
 
     //FIREBASE
@@ -140,6 +146,7 @@ dependencies {
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
     testImplementation ("io.mockk:mockk:1.13.4")
+    androidTestImplementation("io.mockk:mockk-android:1.13.5")
 
 }
 
