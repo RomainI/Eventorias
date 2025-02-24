@@ -295,7 +295,7 @@ fun EventItem(event: Event, onEventClick: (Event) -> Unit, viewModel: EventViewM
                 painter = rememberAsyncImagePainter(event.image),
                 contentDescription = "Event Image",
                 modifier = Modifier
-                    .size(width = 136.dp, height = 80.dp)
+                    .size(width = 85.dp, height = 55.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
