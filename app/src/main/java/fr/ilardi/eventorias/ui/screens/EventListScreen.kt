@@ -51,6 +51,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -63,6 +65,10 @@ import fr.ilardi.eventorias.model.User
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+/**
+ * EventListScreen displays a list of events and allows navigation
+ * to event details or profile by clicking on it
+ */
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -170,6 +176,7 @@ fun EventListScreen(
                         )
                     )
                     NavigationBarItem(
+                        modifier = Modifier.semantics { contentDescription = "Profil" } ,
                         selected = selectedTabIndex == 1,
                         onClick = { selectedTabIndex = 1 },
                         label = { Text("Profil", color = MaterialTheme.colorScheme.onBackground) },

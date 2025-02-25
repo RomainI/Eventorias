@@ -46,6 +46,11 @@ import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 
 
+/**
+ * ManagementScreen displays the user profile information,
+ * allowing them to update their photo and switch on/off notifications
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManagementScreen(
@@ -102,7 +107,7 @@ fun ManagementScreen(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
                 val imagePainter = rememberAsyncImagePainter(
-                    model = selectedImageUri ?: user?.photoUrl?.toString()
+                    model = selectedImageUri ?: user?.profileImage?.toString()
                     ?: "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
                 )
 
@@ -139,7 +144,7 @@ fun ManagementScreen(
                         .height(50.dp)
                 ) {
                     Text(
-                        text = user!!.displayName?:"",
+                        text = user!!.name?:"",
                         color = Color.White,
                         fontSize = 16.sp,
                         modifier = Modifier.padding(8.dp)

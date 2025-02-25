@@ -26,6 +26,12 @@ import fr.ilardi.eventorias.ui.screens.LoginScreen
 import fr.ilardi.eventorias.ui.theme.EventoriasTheme
 import org.json.JSONObject
 
+/**
+ * MainActivity is the entry point of the application.
+ * It initializes the Places API and manages screen routes.
+ */
+
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -36,10 +42,12 @@ class MainActivity : ComponentActivity() {
             Places.initialize(applicationContext, BuildConfig.MAPS_API_KEY)
         }
 
+        val isTestMode = BuildConfig.DEBUG
+
 
         setContent {
             EventoriasTheme {
-                EventoriasApp()
+                EventoriasApp(isTestMode)
             }
         }
     }
@@ -47,13 +55,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun EventoriasApp() {
+fun EventoriasApp(isTestMode: Boolean) {
     val navController = rememberNavController()
-
+    val startDestination = if (isTestMode) "event_list" else "auth"
     NavHost(
         navController = navController,
-        startDestination = "auth"
-        //startDestination = "event_list"
+        startDestination = startDestination
     ) {
         composable("event_list") {
             EventListScreen(
@@ -73,9 +80,6 @@ fun EventoriasApp() {
                 EventDetailScreen(eventId = eventId, onBackClick = { navController.navigateUp() })
             }
         }
-//        composable("profile") {
-//            ProfileScreen()
-//        }
 
         composable("auth") {
             LoginScreen(onLoginAction = { navController.navigate("event_list") })

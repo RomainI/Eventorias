@@ -8,10 +8,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import fr.ilardi.eventorias.repository.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
+
+/**
+ * AppModule provides dependency injection for APIs (Firebase, Retrofit, Google Maps)
+ * and repositories used in the application, for Hilt usage
+ */
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -19,29 +25,22 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth {
-        return FirebaseAuth.getInstance()
-    }
-
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Provides
     @Singleton
-    fun provideFirebaseFirestore(): FirebaseFirestore {
-        return FirebaseFirestore.getInstance()
-    }
-
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
 
     @Provides
     @Singleton
-    fun provideFirebaseStorage(): FirebaseStorage {
-        return FirebaseStorage.getInstance()
-    }
-
-
+    fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
 
     @Provides
     @Singleton
-//    @PlacesRetrofit
+    fun provideAuthUI(): AuthUI = AuthUI.getInstance()
+
+    @Provides
+    @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(GooglePlacesApi.BASE_URL)
@@ -52,16 +51,27 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGooglePlacesApi( retrofit: Retrofit): GooglePlacesApi {
+    fun provideGooglePlacesApi(retrofit: Retrofit): GooglePlacesApi {
         return retrofit.create(GooglePlacesApi::class.java)
     }
 
 
     @Provides
     @Singleton
-    fun provideAuthUI(): AuthUI {
-        return AuthUI.getInstance()
+    fun provideAuthenticationRepository(
+        firebaseAuth: FirebaseAuth,
+        storage: FirebaseStorage,
+        firestore: FirebaseFirestore,
+        authUI: AuthUI
+    ): IAuthenticationRepository {
+        return AuthenticationRepository(firebaseAuth, storage, firestore, authUI)
     }
 
+    @Provides
+    @Singleton
+    fun provideEventRepository(
+        firestore: FirebaseFirestore
+    ): IEventRepository {
+        return FirestoreEventRepository(firestore)
+    }
 }
-

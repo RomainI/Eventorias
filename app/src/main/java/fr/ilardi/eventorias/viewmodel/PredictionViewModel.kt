@@ -11,6 +11,11 @@ import fr.ilardi.eventorias.utils.Resource
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * PredictionViewModel is used to predict address
+ * from Google Places API based on user String input.
+ */
+
 @HiltViewModel
 class PredictionViewModel @Inject constructor(private val googleRepository: GooglePlacesRepository): ViewModel(){
 

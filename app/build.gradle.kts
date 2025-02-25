@@ -1,3 +1,4 @@
+import com.android.build.gradle.BaseExtension
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -7,9 +8,48 @@ plugins {
     id("com.google.gms.google-services")
     alias(libs.plugins.hilt)
     kotlin("kapt")
+    id("jacoco")
 
 }
+tasks.withType<Test> {
+    extensions.configure(JacocoTaskExtension::class) {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
 
+val androidExtension = extensions.getByType<BaseExtension>()
+
+fun getJacocoExecutionData(): FileCollection {
+    return files(
+        project.tasks.withType<Test>().mapNotNull { task ->
+            task.extensions.findByType(JacocoTaskExtension::class.java)?.destinationFile
+        }
+    )
+}
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+val jacocoTestReport by tasks.registering(JacocoReport::class) {
+    dependsOn(tasks.withType<Test>())
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports"
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    classDirectories.setFrom(
+        fileTree("$buildDir/tmp/kotlin-classes/debug") {
+            exclude("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*")
+        }
+    )
+    sourceDirectories.setFrom(files(androidExtension.sourceSets.getByName("main").java.srcDirs))
+    executionData.setFrom(getJacocoExecutionData())
+
+}
 
 
 android {
@@ -25,7 +65,7 @@ android {
         versionName = "1.0"
 
 
-        testInstrumentationRunner = "fr.ilardi.eventorias.CustomHiltTestRunner"
+        testInstrumentationRunner = "fr.ilardi.eventorias.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -81,6 +121,8 @@ android {
     }
 
 }
+
+
 
 dependencies {
 
@@ -147,6 +189,8 @@ dependencies {
 
     testImplementation ("io.mockk:mockk:1.13.4")
     androidTestImplementation("io.mockk:mockk-android:1.13.5")
+    androidTestImplementation ("org.mockito:mockito-android:4.8.0")
+
 
 }
 

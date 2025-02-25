@@ -24,6 +24,12 @@ import fr.ilardi.eventorias.di.GooglePrediction
 import fr.ilardi.eventorias.viewmodel.PredictionViewModel
 
 
+
+/**
+ * AddressSearchField is a Compose. It provides a search input for addresses,
+ * displaying autocomplete suggestions based on user input via PredictionViewModel
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddressSearchField(viewModel: PredictionViewModel, onAddressSelected: (String) -> Unit) {

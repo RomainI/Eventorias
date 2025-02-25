@@ -7,6 +7,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.ilardi.eventorias.repository.AuthenticationRepository
 import javax.inject.Inject
 
+/**
+ * LoginViewModel is used to provide an intent for user sign-in
+ */
+
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val authenticationRepository: AuthenticationRepository): ViewModel() {
 

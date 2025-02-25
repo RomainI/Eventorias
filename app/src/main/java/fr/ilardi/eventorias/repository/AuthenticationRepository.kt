@@ -20,23 +20,36 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * AuthenticationRepository manages authentication.
+ * It uses Firebase Authentication to provide user data
+ */
+
 @Singleton
 class AuthenticationRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val storage: FirebaseStorage,
     private val firestore: FirebaseFirestore,
     private val authUI: AuthUI
-) {
+) : IAuthenticationRepository {
 
-    fun isUserAuthenticated(): Boolean {
+    override fun isUserAuthenticated(): Boolean {
         return firebaseAuth.currentUser != null
     }
 
-    fun getCurrentUser(): FirebaseUser? {
-        return firebaseAuth.currentUser
+    override fun getCurrentUser(): User? {
+        val firebaseUser = firebaseAuth.currentUser
+        return firebaseUser?.let {
+            User(
+                name = it.displayName ?: "Unknown",
+                email = it.email ?: "unknown@example.com",
+                profileImage = it.photoUrl?.toString() ?: "",
+                uid = it.uid
+            )
+        }
     }
 
-    fun getSignInIntent(): Intent {
+    override fun getSignInIntent(): Intent {
         val providers = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build(),
             AuthUI.IdpConfig.EmailBuilder().build()
@@ -50,7 +63,7 @@ class AuthenticationRepository @Inject constructor(
             .build()
     }
 
-    suspend fun getUserByUid(uid: String): User? {
+    override suspend fun getUserByUid(uid: String): User? {
         return try {
             val document = firestore.collection("users").document(uid).get().await()
             if (document.exists()) {
@@ -67,7 +80,7 @@ class AuthenticationRepository @Inject constructor(
         }
     }
 
-    fun saveNewUserInFirebase() {
+    override fun saveNewUserInFirebase() {
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
             val userDocRef = firestore.collection("users").document(currentUser.uid)
@@ -94,14 +107,14 @@ class AuthenticationRepository @Inject constructor(
         }
     }
 
-    suspend fun uploadImageToStorage(imageUri: Uri): String {
+    override suspend fun uploadImageToStorage(imageUri: Uri): String {
         val storageRef =
             storage.reference.child("user_avatars/${Calendar.getInstance().timeInMillis}.jpg")
         storageRef.putFile(imageUri).await()
         return storageRef.downloadUrl.await().toString()
     }
 
-    suspend fun updateUserProfilePhoto(photoUrl: String) {
+    override suspend fun updateUserProfilePhoto(photoUrl: String) {
         val user = firebaseAuth.currentUser ?: return
         val profileUpdates = UserProfileChangeRequest.Builder()
             .setPhotoUri(Uri.parse(photoUrl))
@@ -111,7 +124,7 @@ class AuthenticationRepository @Inject constructor(
         saveNewUserInFirebase()
     }
 
-    fun activateNotification(turnOn: Boolean) {
+    override fun activateNotification(turnOn: Boolean) {
         if (turnOn) {
             FirebaseMessaging.getInstance().subscribeToTopic("notifications")
                 .addOnCompleteListener { task ->

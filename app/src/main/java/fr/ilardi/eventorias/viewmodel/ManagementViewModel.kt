@@ -12,12 +12,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ManagementViewModel manages account based operations
+ * like profile updates (photo) and notification settings
+ */
+
 @HiltViewModel
 class ManagementViewModel @Inject constructor(private val authenticationRepository: AuthenticationRepository): ViewModel() {
 
 
-    private val _user = MutableStateFlow<FirebaseUser?>(authenticationRepository.getCurrentUser())
-    val user: StateFlow<FirebaseUser?> = _user
+    private val _user = MutableStateFlow<User?>(authenticationRepository.getCurrentUser())
+    val user: StateFlow<User?> = _user
 
 
     fun uploadImageAndUpdateProfile(imageUri: Uri) {

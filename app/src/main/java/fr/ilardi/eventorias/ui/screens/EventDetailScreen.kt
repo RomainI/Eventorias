@@ -48,6 +48,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import coil.compose.rememberAsyncImagePainter
+import fr.ilardi.eventorias.BuildConfig
+
+/**
+ * EventDetailScreen displays detailed information about an event.
+ * Including title, description, photo, author, address, date / time
+ */
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -179,7 +185,7 @@ fun EventDetailScreen(
                             .padding(end = 8.dp),
                         color = Color.White
                     )
-                    val mapUrl = viewModel.loadMap(event.address)
+                    val mapUrl = viewModel.loadMap(event.address, BuildConfig.MAPS_API_KEY)
                     Image(
                         painter = rememberAsyncImagePainter(mapUrl),
                         contentDescription = "Map Image",

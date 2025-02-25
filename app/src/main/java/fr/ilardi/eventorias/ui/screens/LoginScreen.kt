@@ -12,11 +12,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseAuth
 import fr.ilardi.eventorias.viewmodel.LoginViewModel
 
+/**
+ * LoginScreen handles authentication using Firebase UI Auth.
+ */
+
 @Composable
 fun LoginScreen(
     onLoginAction: () -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel(),
-    firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance() // Injecté via Hilt en test
+    firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ) {
     Box(modifier = Modifier.testTag("DisplayLoginScreen"))
 
@@ -29,7 +33,7 @@ fun LoginScreen(
     }
 
     LaunchedEffect(Unit) {
-        if (firebaseAuth.currentUser == null) { // Firebase ne doit pas bloquer l'affichage
+        if (firebaseAuth.currentUser == null) {
             val loginIntent = loginViewModel.getLoginIntent()
             authLauncher.launch(loginIntent)
         }

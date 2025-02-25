@@ -4,6 +4,10 @@ import fr.ilardi.eventorias.BuildConfig
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+/**
+ * Retrofit interface for Google Places API.
+ * Answer will be mapped in a GooglePredictionsResponse object
+ */
 
 interface GooglePlacesApi {
     @GET("maps/api/place/autocomplete/json")

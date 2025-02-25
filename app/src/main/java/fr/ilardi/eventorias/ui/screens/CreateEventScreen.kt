@@ -53,6 +53,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
@@ -65,6 +67,12 @@ import fr.ilardi.eventorias.viewmodel.PredictionViewModel
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.round
+
+/**
+ * CreateEventScreen allows connected users to create an event by filling a form, including elements :
+ * title, description, date, time, and address.
+ * Users can also upload a photo from the camera or gallery.
+ */
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -143,13 +151,7 @@ fun CreateEventScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Title Input
-//            Text(
-//                text = "Title",
-//                color = Color.Gray,
-//                fontSize = 12.sp,
-//                modifier = Modifier.fillMaxWidth()
-//            )
+
             Surface(
                 shape = MaterialTheme.shapes.small,
                 color = Color.DarkGray,
@@ -174,13 +176,7 @@ fun CreateEventScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Description Input
-//            Text(
-//                text = "Description",
-//                color = Color.Gray,
-//                fontSize = 12.sp,
-//                modifier = Modifier.fillMaxWidth()
-//            )
+
             Surface(
                 shape = MaterialTheme.shapes.small,
                 color = Color.DarkGray,
@@ -205,13 +201,10 @@ fun CreateEventScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Date and Time
-            // Partie "Date et Heure" avec Row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Date Picker
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -227,7 +220,7 @@ fun CreateEventScreen(
                     ) {
                         TextField(
                             value = date,
-                            onValueChange = {date = it},
+                            onValueChange = { date = it },
                             textStyle = LocalTextStyle.current.copy(color = Color.White),
                             label = { Text(text = "Date", color = Color.Gray) },
                             placeholder = { Text(text = "Select Date", color = Color.Gray) },
@@ -237,12 +230,11 @@ fun CreateEventScreen(
                                 unfocusedIndicatorColor = Color.Transparent
                             ),
                             shape = RoundedCornerShape(4.dp),
-                            enabled = false // Pour empêcher la saisie manuelle
+                            enabled = false
                         )
                     }
                 }
 
-                // Time Picker
                 Column(modifier = Modifier.weight(1f)) {
                     Surface(
                         shape = MaterialTheme.shapes.small,
@@ -254,7 +246,7 @@ fun CreateEventScreen(
                     ) {
                         TextField(
                             value = time,
-                            onValueChange = {time = it},
+                            onValueChange = { time = it },
                             textStyle = LocalTextStyle.current.copy(color = Color.White),
                             label = { Text(text = "Time", color = Color.Gray) },
                             placeholder = { Text(text = "Select Time", color = Color.Gray) },
@@ -272,49 +264,20 @@ fun CreateEventScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            /**  Surface(
-            shape = MaterialTheme.shapes.small,
-            color = Color.DarkGray,
-            modifier = Modifier
-            .fillMaxWidth()
-
-            ) {*/
-            /** TextField(
-            value = address,
-            onValueChange = { address = it },
-            textStyle = LocalTextStyle.current.copy(color = Color.White),
-            label = { Text(text = "Address", color = Color.Gray) },
-            placeholder = { Text(text = "Enter address", color = Color.Gray) },
-            colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(4.dp)
-            )*/
-
-//                Text(
-//                    text = "Address",
-//                    color = Color.Gray,
-//                    fontSize = 12.sp,
-//                    modifier = Modifier.padding(bottom = 8.dp)
-//                )
             AddressSearchField(
                 viewModel = predictionViewModel,
                 onAddressSelected = { selectedAddress ->
-                    address = selectedAddress // Met à jour la variable address
+                    address = selectedAddress
                 }
             )
 
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Buttons for Image Selection
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Camera Button
                 IconButton(
                     onClick = { cameraLauncher.launch() },
                     modifier = Modifier
@@ -330,7 +293,6 @@ fun CreateEventScreen(
                     )
                 }
 
-                // Gallery Button
                 IconButton(
                     onClick = { galleryLauncher.launch("image/*") },
                     modifier = Modifier
@@ -360,7 +322,7 @@ fun CreateEventScreen(
                             time = time,
                             address = address,
                             image = selectedImageUri?.toString() ?: "",
-                            authorUid = viewModel.getFirebaseUser()?.uid,
+                            authorUid = viewModel.getUser()?.uid,
                             id = Calendar.getInstance().timeInMillis.toString()
                         )
                         viewModel.addEvent(event)
@@ -373,7 +335,9 @@ fun CreateEventScreen(
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics { contentDescription = "Validate" }
             ) {
                 Text("Validate", color = Color.White)
             }
