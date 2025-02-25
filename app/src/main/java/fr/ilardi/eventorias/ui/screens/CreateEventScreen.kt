@@ -52,6 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -131,7 +132,7 @@ fun CreateEventScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Creation of an event", color = Color.White) },
+                title = { Text(text = stringResource(R.string.creation_of_an_event), color = Color.White) },
                 navigationIcon = {
                     IconButton(onClick = { onBackClick() }) {
                         Icon(
@@ -188,8 +189,8 @@ fun CreateEventScreen(
                     value = description,
                     onValueChange = { description = it },
                     textStyle = LocalTextStyle.current.copy(color = Color.White),
-                    label = { Text(text = "Description", color = Color.Gray) },
-                    placeholder = { Text(text = "Enter description", color = Color.Gray) },
+                    label = { Text(text = stringResource(R.string.description), color = Color.Gray) },
+                    placeholder = { Text(text = stringResource(R.string.enter_description), color = Color.Gray) },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
@@ -222,8 +223,8 @@ fun CreateEventScreen(
                             value = date,
                             onValueChange = { date = it },
                             textStyle = LocalTextStyle.current.copy(color = Color.White),
-                            label = { Text(text = "Date", color = Color.Gray) },
-                            placeholder = { Text(text = "Select Date", color = Color.Gray) },
+                            label = { Text(text = stringResource(R.string.date), color = Color.Gray) },
+                            placeholder = { Text(text = stringResource(R.string.select_date), color = Color.Gray) },
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
@@ -248,8 +249,8 @@ fun CreateEventScreen(
                             value = time,
                             onValueChange = { time = it },
                             textStyle = LocalTextStyle.current.copy(color = Color.White),
-                            label = { Text(text = "Time", color = Color.Gray) },
-                            placeholder = { Text(text = "Select Time", color = Color.Gray) },
+                            label = { Text(text = stringResource(R.string.time), color = Color.Gray) },
+                            placeholder = { Text(text = stringResource(R.string.select_time), color = Color.Gray) },
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
@@ -311,7 +312,8 @@ fun CreateEventScreen(
 
             Spacer(modifier = Modifier.height(46.dp))
 
-            // Validate Button
+            val okMessage = stringResource(R.string.event_added_successfully)
+            val nokMessage = stringResource(R.string.you_must_complete_all_fields)
             Button(
                 onClick = {
                     if (title.isNotEmpty() && date.isNotEmpty() && description.isNotEmpty() && address.isNotEmpty()) {
@@ -326,11 +328,11 @@ fun CreateEventScreen(
                             id = Calendar.getInstance().timeInMillis.toString()
                         )
                         viewModel.addEvent(event)
-                        Toast.makeText(context, "Event added successfully", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, okMessage, Toast.LENGTH_SHORT)
                             .show()
                         onBackClick()
                     } else {
-                        Toast.makeText(context, "You must complete all fields", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, nokMessage, Toast.LENGTH_SHORT)
                             .show()
                     }
                 },
@@ -339,7 +341,7 @@ fun CreateEventScreen(
                     .fillMaxWidth()
                     .semantics { contentDescription = "Validate" }
             ) {
-                Text("Validate", color = Color.White)
+                Text(stringResource(R.string.validate), color = Color.White)
             }
         }
     }

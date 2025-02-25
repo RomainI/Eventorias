@@ -18,8 +18,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import fr.ilardi.eventorias.R
 import fr.ilardi.eventorias.di.GooglePrediction
 import fr.ilardi.eventorias.viewmodel.PredictionViewModel
 
@@ -51,7 +53,7 @@ fun AddressSearchField(viewModel: PredictionViewModel, onAddressSelected: (Strin
             },
             textStyle = LocalTextStyle.current.copy(color = Color.White),
 
-            placeholder =  {Text(text = "Enter address", color = Color.Gray) },
+            placeholder =  {Text(text = stringResource(R.string.enter_address), color = Color.Gray) },
             label =  {Text(text ="Address", color = Color.Gray )},
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.DarkGray,
@@ -66,7 +68,7 @@ fun AddressSearchField(viewModel: PredictionViewModel, onAddressSelected: (Strin
         )
 
         if (isLoading) {
-            Text("Loading suggestions...", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+            Text(stringResource(R.string.loading_suggestions), style = MaterialTheme.typography.bodySmall, color = Color.Gray)
         }
 
         // Suggestions List

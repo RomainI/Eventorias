@@ -104,10 +104,10 @@ fun EventListScreen(
                             TextField(
                                 value = searchQuery,
                                 onValueChange = { searchQuery = it },
-                                placeholder = { Text("Search events...") }
+                                placeholder = { Text(stringResource(R.string.search_events)) }
                             )
                         } else {
-                            Text(text = "Event list", color = Color.White)
+                            Text(text = stringResource(R.string.event_list), color = Color.White)
                         }
                     },
                     actions = {
@@ -156,7 +156,7 @@ fun EventListScreen(
                         onClick = { selectedTabIndex = 0 },
                         label = {
                             Text(
-                                text = "Événements",
+                                text = stringResource(R.string.events),
                                 color = MaterialTheme.colorScheme.onBackground
                             )
                         },
@@ -179,11 +179,11 @@ fun EventListScreen(
                         modifier = Modifier.semantics { contentDescription = "Profil" } ,
                         selected = selectedTabIndex == 1,
                         onClick = { selectedTabIndex = 1 },
-                        label = { Text("Profil", color = MaterialTheme.colorScheme.onBackground) },
+                        label = { Text(stringResource(R.string.profile), color = MaterialTheme.colorScheme.onBackground) },
                         icon = {
                             Icon(
                                 Icons.Default.Person,
-                                contentDescription = "Profil",
+                                contentDescription = stringResource(R.string.profile),
                                 tint = MaterialTheme.colorScheme.onBackground
                             )
                         },

@@ -65,7 +65,7 @@ fun EventDetailScreen(
 ) {
 
     if (eventId == null) {
-        Text(text = "Error")
+        Text(text =stringResource(R.string.error))
         return
     }
 

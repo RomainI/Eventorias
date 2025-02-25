@@ -4,5 +4,28 @@
     <string name="app_name">Eventorias</string>
     <string name="contentDescription_go_back">Bouton retour</string>
     <string name="add_fragment_label">Ajouter un evenement</string>
+    <string name="enter_address">Entrer une adresse</string>
+    <string name="loading_suggestions">Chargement des suggestions...</string>
+    <string name="image_updated">Image mise à jour !</string>
+    <string name="notifications_enabled">Notifications activées</string>
+    <string name="notifications_disabled">Notifications désactivées</string>
+    <string name="error_loading_user_data">Erreur lors du chargement des données utilisateur</string>
+    <string name="search_events">Recherche d evenements...</string>
+    <string name="event_list">Liste d evenements</string>
+    <string name="events">Evenements</string>
+    <string name="profile">Profil</string>
+    <string name="error">Erreur</string>
+    <string name="creation_of_an_event">Creation d un evenement</string>
+    <string name="description">Description</string>
+    <string name="enter_description">Entrer une description</string>
+    <string name="date">Date</string>
+    <string name="select_date">Selectionner une date</string>
+    <string name="time">Heure</string>
+
+    <string name="select_time">Selectionner une heure</string>
+    <string name="validate">Valider</string>
+    <string name="event_added_successfully">Evenement ajoute avec succes</string>
+    <string name="you_must_complete_all_fields">Vous devez completer tous les champs</string>
+
 
 </resources>

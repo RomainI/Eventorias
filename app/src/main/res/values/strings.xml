@@ -3,5 +3,35 @@
     <string name="contentDescription_go_back">Return button</string>
 
     <string name="add_fragment_label">Add an event</string>
+    <string name="enter_address">Enter address</string>
+    <string name="loading_suggestions">Loading suggestions...</string>
+    <string name="image_updated">Image updated</string>
+    <string name="notifications_enabled">Notifications enabled</string>
+    <string name="notifications_disabled">Notifications disabled</string>
+    <string name="error_loading_user_data">Error loading user data</string>
+    <string name="search_events">Search events...</string>
+    <string name="event_list">Event list</string>
+    <string name="events">Events</string>
+    <string name="profile">Profile</string>
+    <string name="error">Error</string>
+    <string name="creation_of_an_event">Creation of an event</string>
+    <string name="description">Description</string>
+    <string name="enter_description">Enter description</string>
+    <string name="date">Date</string>
+    <string name="select_date">Select date</string>
+    <string name="time">Time</string>
+
+    <string name="select_time">Select time</string>
+    <string name="validate">Validate</string>
+    <string name="event_added_successfully">Event added successfully</string>
+    <string name="you_must_complete_all_fields">You must complete all fields</string>
+
+
+
+    Event added successfully
+    You must complete all fields
+    Validate
+    Date
+
 
 </resources>

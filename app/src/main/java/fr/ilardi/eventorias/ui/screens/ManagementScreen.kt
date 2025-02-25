@@ -39,11 +39,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import fr.ilardi.eventorias.R
+
 
 
 /**
@@ -61,27 +64,31 @@ fun ManagementScreen(
     var selectedImageUri by remember { mutableStateOf<String?>(null) }
 
     val context = LocalContext.current
+    val messageSwitchOn = stringResource(R.string.notifications_enabled)
+    val messageSwitchOff = stringResource(R.string.notifications_disabled)
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
             if (isGranted) {
-                Toast.makeText(context, "Notifications activées", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, messageSwitchOn, Toast.LENGTH_SHORT).show()
                 viewModel.switchNotification(true)
             } else {
-                Toast.makeText(context, "Notifications désactivées", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, messageSwitchOff, Toast.LENGTH_SHORT).show()
                 viewModel.switchNotification(false)
             }
         }
     )
-
+    val message = stringResource(R.string.image_updated)
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
+
     ) { uri ->
         if (uri != null) {
             selectedImageUri = uri.toString()
             viewModel.uploadImageAndUpdateProfile(uri)
-            Toast.makeText(context, "Image mise à jour !", Toast.LENGTH_SHORT).show()
+
+            Toast.makeText(context, message , Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -201,7 +208,7 @@ fun ManagementScreen(
                                 viewModel.switchNotification(true)
                                 Toast.makeText(
                                     context,
-                                    "Notifications activées",
+                                    messageSwitchOn,
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -209,7 +216,7 @@ fun ManagementScreen(
                             viewModel.switchNotification(false)
                             Toast.makeText(
                                 context,
-                                "Notifications désactivées",
+                                messageSwitchOff,
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -228,7 +235,7 @@ fun ManagementScreen(
         }
     } else {
         Text(
-            text = "Error loading user data",
+            text = stringResource(R.string.error_loading_user_data),
             color = Color.Red,
             modifier = Modifier
                 .fillMaxSize()
